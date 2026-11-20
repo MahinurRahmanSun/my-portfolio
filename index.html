@@ -2,100 +2,111 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <!-- Makes the page fit phone screens properly (needed for responsive design) -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Md. Mahinur Rahman Sun | CSE Student</title>
-  <!-- Connects our CSS file to this page -->
+  <meta name="description" content="Portfolio of Md. Mahinur Rahman Sun, BSc in CSE student at Southeast University.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <!-- NAVBAR: links at the top that jump to each section -->
   <header class="nav">
-    <a class="logo" href="#hero">Md. Mahinur Rahman Sun</a>
-    <nav>
-      <a href="#about">About</a>
-      <a href="#skills">Skills</a>
-      <a href="#projects">Projects</a>
-      <a href="#contact">Contact</a>
-    </nav>
+    <div class="nav-inner">
+      <a class="brand" href="#top">Mahinur Rahman Sun</a>
+      <nav aria-label="Main">
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+        <a class="nav-cta" href="#contact">Contact</a>
+      </nav>
+    </div>
   </header>
 
-  <main>
+  <main id="top">
+    <section class="hero">
+      <div class="hero-text">
+        <p class="status"><span class="dot"></span>BSc in CSE, Southeast University</p>
+        <h1>Md. Mahinur Rahman Sun</h1>
+        <p class="lead">I build clean, responsive websites and use AI tools to work faster, while making sure I understand everything I ship.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="#projects">View projects</a>
+          <a class="btn btn-ghost" href="#contact">Get in touch</a>
+        </div>
+      </div>
+      <aside class="profile" aria-label="Quick facts">
+        <div class="monogram">MS</div>
+        <dl>
+          <div><dt>Education</dt><dd>BSc in Computer Science and Engineering</dd></div>
+          <div><dt>University</dt><dd>Southeast University</dd></div>
+          <div><dt>Location</dt><dd>Dhaka, Bangladesh</dd></div>
+          <div><dt>Focus</dt><dd>Frontend web development</dd></div>
+        </dl>
+      </aside>
+    </section>
 
-    <!-- HERO: the first thing a recruiter sees. Keep it short and clear -->
-    <section id="hero" class="hero">
-      <p class="hello">Hi, I'm</p>
-      <h1>Md. Mahinur Rahman Sun</h1>
-      <p class="tagline">CSE student who builds websites.</p>
-      <div class="buttons">
-        <a class="btn primary" href="#projects">See my work</a>
-        <a class="btn" href="#contact">Contact me</a>
+    <section id="about" class="section">
+      <h2>About</h2>
+      <div class="about-body">
+        <p>I'm a BSc in CSE student at Southeast University in Dhaka, focused on frontend web development.</p>
+        <p>I learn by building: every concept I study becomes a small project on GitHub. I use AI tools as a fast assistant, and I review and understand each line before it goes into my work.</p>
       </div>
     </section>
 
-    <!-- ABOUT: 2-3 lines about you -->
-    <section id="about" class="section">
-      <h2>About</h2>
-      <p>
-        I'm a BSc in CSE student at Southeast University, Dhaka.
-        I'm learning web development and building small projects to
-        practice what I learn. I also use AI tools to work faster,
-        and I make sure I understand every line I ship.
-      </p>
-    </section>
-
-    <!-- SKILLS: each skill is one small tag. Add more as you learn -->
     <section id="skills" class="section">
       <h2>Skills</h2>
-      <ul class="skills">
-        <li>HTML</li>
-        <li>CSS</li>
-        <li>JavaScript (learning)</li>
-        <li>Git &amp; GitHub</li>
-        <li>VS Code</li>
-        <li>Using AI tools</li>
-      </ul>
+      <div class="skill-grid">
+        <div class="skill-group">
+          <h3>Frontend</h3>
+          <ul><li>HTML</li><li>CSS</li><li>Responsive design</li><li>JavaScript (learning)</li></ul>
+        </div>
+        <div class="skill-group">
+          <h3>Tools</h3>
+          <ul><li>Git</li><li>GitHub</li><li>VS Code</li></ul>
+        </div>
+        <div class="skill-group">
+          <h3>Workflow</h3>
+          <ul><li>AI-assisted development</li><li>Debugging</li><li>Clear documentation</li></ul>
+        </div>
+      </div>
     </section>
 
-    <!-- PROJECTS: each project is one "card". Copy a card to add a new one -->
     <section id="projects" class="section">
       <h2>Projects</h2>
       <div class="cards">
-
-        <!-- Project card 1 (this site itself) -->
         <article class="card">
-          <h3>Portfolio website</h3>
-          <p>The site you are looking at. Built with HTML and CSS.</p>
-          <a href="https://github.com/MahinurRahmanSun/my-portfolio">View code</a>
+          <div class="card-top">
+            <h3>Personal portfolio</h3>
+            <span class="tag tag-live">Live</span>
+          </div>
+          <p>A responsive, single-page portfolio built with semantic HTML and hand-written CSS.</p>
+          <p class="stack">HTML, CSS</p>
+          <a class="card-link" href="https://github.com/MahinurRahmanSun/my-portfolio">View on GitHub</a>
         </article>
-
-        <!-- Project card 2 (replace when you build your next project) -->
-        <article class="card">
-          <h3>Next project</h3>
-          <p>Coming soon. A to-do app with JavaScript.</p>
+        <article class="card card-soon">
+          <div class="card-top">
+            <h3>Task manager</h3>
+            <span class="tag">In progress</span>
+          </div>
+          <p>A to-do app with add, complete and delete actions, built to practice JavaScript and the DOM.</p>
+          <p class="stack">HTML, CSS, JavaScript</p>
         </article>
-
       </div>
     </section>
 
-    <!-- CONTACT: make it easy for a recruiter to reach you -->
-    <section id="contact" class="section">
+    <section id="contact" class="section contact">
       <h2>Contact</h2>
-      <p>Feel free to reach out.</p>
-      <ul class="links">
-        <li><a href="mailto:md.mahinur.rahman.sun@gmail.com">md.mahinur.rahman.sun@gmail.com</a></li>
+      <p>Have a question or want to work together? Send me an email and I'll get back to you.</p>
+      <a class="btn btn-primary" href="mailto:md.mahinur.rahman.sun@gmail.com">md.mahinur.rahman.sun@gmail.com</a>
+      <ul class="social">
         <li><a href="https://github.com/MahinurRahmanSun">GitHub</a></li>
         <li><a href="https://www.linkedin.com/in/mahinurrahmansun">LinkedIn</a></li>
       </ul>
     </section>
-
   </main>
 
-  <!-- FOOTER: small line at the bottom -->
   <footer>
     <p>&copy; 2026 Md. Mahinur Rahman Sun</p>
   </footer>
-
 </body>
 </html>
