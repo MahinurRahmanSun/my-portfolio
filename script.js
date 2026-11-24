@@ -1,51 +1,50 @@
 const root = document.documentElement;
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+const EMAIL = "md.mahinur.rahman.sun@gmail.com";
 
-document.querySelectorAll("[data-split]").forEach((line, lineIndex) => {
-  const text = line.textContent;
-  line.textContent = "";
-  Array.from(text).forEach((char, index) => {
-    const span = document.createElement("span");
-    span.className = "ch";
-    span.setAttribute("aria-hidden", "true");
-    span.style.setProperty("--i", index + lineIndex * 7);
-    span.textContent = char === " " ? "\u00a0" : char;
-    line.append(span);
-  });
-});
-
-function finishLoading() {
-  root.classList.add("loaded");
-}
-
-const counter = document.getElementById("count");
-if (reduceMotion) {
-  finishLoading();
-} else {
-  const startTime = performance.now();
-  const duration = 1200;
-  const tick = (now) => {
-    const progress = clamp((now - startTime) / duration, 0, 1);
-    counter.textContent = Math.round(progress * 100);
-    if (progress < 1) requestAnimationFrame(tick);
-    else setTimeout(finishLoading, 200);
-  };
-  requestAnimationFrame(tick);
-  setTimeout(finishLoading, 4000);
-}
-
-const themeButton = document.getElementById("theme");
-themeButton.addEventListener("click", () => {
-  const next = root.dataset.theme === "dark" ? "light" : "dark";
-  root.dataset.theme = next;
-  try {
-    localStorage.setItem("theme", next);
-  } catch (error) {
-    console.error("Could not save theme", error);
+function typeInto(el, text, speed = 55) {
+  if (reduceMotion) {
+    el.textContent = text;
+    return;
   }
+  let index = 0;
+  el.textContent = "";
+  const timer = setInterval(() => {
+    index += 1;
+    el.textContent = text.slice(0, index);
+    if (index >= text.length) clearInterval(timer);
+  }, speed);
+}
+
+document.querySelectorAll(".typed").forEach((el, i) => {
+  const text = el.dataset.type;
+  if (i === 0) {
+    setTimeout(() => typeInto(el, text), 400);
+    return;
+  }
+  el.textContent = "";
+  const observer = new IntersectionObserver((entries, obs) => {
+    if (entries[0].isIntersecting) {
+      typeInto(el, text);
+      obs.disconnect();
+    }
+  }, { threshold: 0.8 });
+  observer.observe(el);
 });
+
+const swatches = document.querySelectorAll(".swatches button");
+swatches.forEach((button) => {
+  button.addEventListener("click", () => setAccent(button.dataset.accent));
+});
+function setAccent(name) {
+  root.dataset.accent = name;
+  try {
+    localStorage.setItem("accent", name);
+  } catch (error) {
+    console.error("Could not save accent", error);
+  }
+}
 
 const menuToggle = document.querySelector(".menu-toggle");
 const siteNav = document.getElementById("site-nav");
@@ -64,7 +63,7 @@ const revealObserver = new IntersectionObserver((entries, observer) => {
       observer.unobserve(entry.target);
     }
   });
-}, { threshold: 0.15 });
+}, { threshold: 0.12 });
 document.querySelectorAll(".reveal").forEach((el) => revealObserver.observe(el));
 
 const sectionObserver = new IntersectionObserver((entries) => {
@@ -75,110 +74,157 @@ const sectionObserver = new IntersectionObserver((entries) => {
 }, { rootMargin: "-40% 0px -55% 0px" });
 navLinks.map((link) => document.querySelector(link.getAttribute("href"))).filter(Boolean).forEach((section) => sectionObserver.observe(section));
 
-const statement = document.getElementById("statement");
-const words = statement.textContent.trim().split(/\s+/);
-statement.textContent = "";
-const wordEls = words.map((word) => {
-  const span = document.createElement("span");
-  span.className = "w";
-  span.textContent = word;
-  statement.append(span, " ");
-  return span;
-});
-
 const progress = document.getElementById("progress");
-function onScroll() {
+window.addEventListener("scroll", () => {
   const max = root.scrollHeight - window.innerHeight;
   progress.style.transform = "scaleX(" + (max > 0 ? window.scrollY / max : 0) + ")";
-  const start = window.innerHeight * 0.88;
-  const end = window.innerHeight * 0.4;
-  wordEls.forEach((el) => {
-    const top = el.getBoundingClientRect().top;
-    const amount = clamp((start - top) / (start - end), 0, 1);
-    el.style.opacity = 0.18 + amount * 0.82;
-  });
-}
-let scrollTicking = false;
-window.addEventListener("scroll", () => {
-  if (scrollTicking) return;
-  scrollTicking = true;
-  requestAnimationFrame(() => {
-    onScroll();
-    scrollTicking = false;
-  });
 }, { passive: true });
-window.addEventListener("resize", onScroll);
-onScroll();
 
 const timeEl = document.getElementById("time");
 const formatter = new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Dhaka", hour: "2-digit", minute: "2-digit", hour12: false });
 function updateTime() {
-  timeEl.textContent = formatter.format(new Date());
+  timeEl.textContent = formatter.format(new Date()) + " BST";
 }
 updateTime();
 setInterval(updateTime, 15000);
 
 const toast = document.getElementById("toast");
-document.getElementById("copy").addEventListener("click", async (event) => {
-  const email = event.currentTarget.dataset.email;
-  try {
-    await navigator.clipboard.writeText(email);
-    toast.textContent = "Email copied";
-  } catch (error) {
-    toast.textContent = email;
-  }
+function showToast(message) {
+  toast.textContent = message;
   toast.classList.add("show");
   setTimeout(() => toast.classList.remove("show"), 2200);
+}
+document.getElementById("copy").addEventListener("click", async () => {
+  try {
+    await navigator.clipboard.writeText(EMAIL);
+    showToast("Email copied");
+  } catch (error) {
+    showToast(EMAIL);
+  }
 });
 
 if (finePointer && !reduceMotion) {
-  root.classList.add("cursor-on");
-  const dot = document.getElementById("cursor");
-  const ring = document.getElementById("ring");
-  const preview = document.getElementById("preview");
-  const previewTitle = document.getElementById("preview-title");
-  let mouseX = -100, mouseY = -100, ringX = -100, ringY = -100, previewX = -100, previewY = -100;
-
   window.addEventListener("mousemove", (event) => {
-    mouseX = event.clientX;
-    mouseY = event.clientY;
-    dot.style.transform = "translate3d(" + mouseX + "px," + mouseY + "px,0)";
+    root.style.setProperty("--mx", event.clientX + "px");
+    root.style.setProperty("--my", event.clientY + "px");
   }, { passive: true });
-
-  (function animate() {
-    ringX += (mouseX - ringX) * 0.18;
-    ringY += (mouseY - ringY) * 0.18;
-    previewX += (mouseX - previewX) * 0.12;
-    previewY += (mouseY - previewY) * 0.12;
-    ring.style.transform = "translate3d(" + ringX + "px," + ringY + "px,0)";
-    preview.style.transform = "translate3d(" + previewX + "px," + previewY + "px,0)";
-    requestAnimationFrame(animate);
-  })();
-
-  document.querySelectorAll("a, button, .row").forEach((el) => {
-    el.addEventListener("mouseenter", () => ring.classList.add("grow"));
-    el.addEventListener("mouseleave", () => ring.classList.remove("grow"));
-  });
-
-  document.querySelectorAll(".row").forEach((row) => {
-    row.addEventListener("mouseenter", () => {
-      preview.style.setProperty("--c1", row.dataset.c1);
-      preview.style.setProperty("--c2", row.dataset.c2);
-      previewTitle.textContent = row.dataset.title;
-      preview.classList.add("on");
-    });
-    row.addEventListener("mouseleave", () => preview.classList.remove("on"));
-  });
-
-  document.querySelectorAll(".btn").forEach((btn) => {
-    btn.addEventListener("mousemove", (event) => {
-      const rect = btn.getBoundingClientRect();
-      btn.style.setProperty("--bx", (event.clientX - rect.left - rect.width / 2) * 0.22 + "px");
-      btn.style.setProperty("--by", (event.clientY - rect.top - rect.height / 2) * 0.3 + "px");
-    });
-    btn.addEventListener("mouseleave", () => {
-      btn.style.setProperty("--bx", "0px");
-      btn.style.setProperty("--by", "0px");
-    });
-  });
 }
+
+const out = document.getElementById("term-out");
+const form = document.getElementById("term-form");
+const input = document.getElementById("term-input");
+const term = document.getElementById("term");
+const history = [];
+let historyIndex = 0;
+
+function line(text, className) {
+  const div = document.createElement("div");
+  if (className) div.className = className;
+  div.textContent = text;
+  out.append(div);
+  return div;
+}
+
+function linkLine(label, href) {
+  const div = document.createElement("div");
+  const a = document.createElement("a");
+  a.href = href;
+  a.textContent = label;
+  a.target = "_blank";
+  a.rel = "noopener";
+  div.append(a);
+  out.append(div);
+}
+
+const commands = {
+  help() {
+    line("Available commands:", "ok");
+    line("  about     who I am");
+    line("  skills    what I work with");
+    line("  projects  things I've built");
+    line("  contact   how to reach me");
+    line("  whoami    short intro");
+    line("  accent    cycle the accent color");
+    line("  clear     clean the screen");
+  },
+  about() {
+    line("Md. Mahinur Rahman Sun", "ok");
+    line("BSc in CSE student at Southeast University, Dhaka.");
+    line("Frontend-focused. I learn by building, deploy every project live,");
+    line("and make sure I understand every line I ship.");
+  },
+  whoami() {
+    line("visitor, but you can call me a friend of the web.", "dim");
+    line("Owner of this site: Md. Mahinur Rahman Sun.");
+  },
+  skills() {
+    line("using     HTML, CSS, Responsive design, Git, GitHub, VS Code, Vercel", "ok");
+    line("learning  JavaScript");
+    line("next      React, Figma, API integration, AI-powered apps", "dim");
+  },
+  projects() {
+    line("01  Personal portfolio", "ok");
+    linkLine("    live: mahinurrahmansun.vercel.app", "https://mahinurrahmansun.vercel.app/");
+    line("02  Task manager", "ok");
+    linkLine("    live: sun-taskmanager.vercel.app", "https://sun-taskmanager.vercel.app");
+  },
+  contact() {
+    linkLine("email     " + EMAIL, "mailto:" + EMAIL);
+    linkLine("github    github.com/MahinurRahmanSun", "https://github.com/MahinurRahmanSun");
+    linkLine("linkedin  linkedin.com/in/mahinurrahmansun", "https://www.linkedin.com/in/mahinurrahmansun");
+  },
+  accent() {
+    const order = ["teal", "amber", "violet"];
+    const next = order[(order.indexOf(root.dataset.accent) + 1) % order.length];
+    setAccent(next);
+    line("accent set to " + next, "ok");
+  },
+  clear() {
+    out.textContent = "";
+  }
+};
+
+function run(raw) {
+  const command = raw.trim().toLowerCase();
+  if (!command) return;
+  if (command !== "clear") line("visitor@mahinur:~$ " + raw.trim(), "cmd");
+  if (commands[command]) {
+    commands[command]();
+  } else if (command.startsWith("sudo")) {
+    line("Nice try. The best way to hire me is an email:", "dim");
+    commands.contact();
+  } else {
+    line("command not found: " + command + ". Type 'help'.", "dim");
+  }
+  term.scrollTop = term.scrollHeight;
+}
+
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const value = input.value;
+  if (value.trim()) {
+    history.push(value);
+    historyIndex = history.length;
+  }
+  input.value = "";
+  run(value);
+});
+
+input.addEventListener("keydown", (event) => {
+  if (event.key === "ArrowUp" && history.length) {
+    event.preventDefault();
+    historyIndex = Math.max(0, historyIndex - 1);
+    input.value = history[historyIndex];
+  } else if (event.key === "ArrowDown") {
+    event.preventDefault();
+    historyIndex = Math.min(history.length, historyIndex + 1);
+    input.value = history[historyIndex] || "";
+  }
+});
+
+term.addEventListener("click", () => input.focus({ preventScroll: true }));
+document.querySelectorAll(".quick button").forEach((button) => {
+  button.addEventListener("click", () => run(button.dataset.cmd));
+});
+
+line("Welcome! This is an interactive terminal. Type 'help' to begin.", "ok");
