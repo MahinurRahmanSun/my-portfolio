@@ -8,13 +8,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>document.documentElement.classList.add("js");</script>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header class="nav">
     <div class="nav-inner">
       <a class="brand" href="#top">Mahinur Rahman Sun</a>
-      <nav aria-label="Main">
+      <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+      <nav id="site-nav" aria-label="Main">
         <a href="#about">About</a>
         <a href="#skills">Skills</a>
         <a href="#projects">Projects</a>
@@ -35,7 +37,7 @@
         </div>
       </div>
       <aside class="profile" aria-label="Quick facts">
-        <div class="monogram">SUN</div>
+        <div class="monogram">MS</div>
         <dl>
           <div><dt>Education</dt><dd>BSc in Computer Science and Engineering</dd></div>
           <div><dt>University</dt><dd>Southeast University</dd></div>
@@ -45,7 +47,7 @@
       </aside>
     </section>
 
-    <section id="about" class="section">
+    <section id="about" class="section reveal">
       <h2>About</h2>
       <div class="about-body">
         <p>I'm a BSc in CSE student at Southeast University in Dhaka, focused on frontend web development.</p>
@@ -53,52 +55,55 @@
       </div>
     </section>
 
-    <section id="skills" class="section">
+    <section id="skills" class="section reveal">
       <h2>Skills</h2>
       <div class="skill-grid">
-        <div class="skill-group">
+        <div class="skill-group reveal" style="--d:0s">
           <h3>Frontend</h3>
           <ul><li>HTML</li><li>CSS</li><li>Responsive design</li><li>JavaScript (learning)</li></ul>
         </div>
-        <div class="skill-group">
+        <div class="skill-group reveal" style="--d:.1s">
           <h3>Tools</h3>
           <ul><li>Git</li><li>GitHub</li><li>VS Code</li></ul>
         </div>
-        <div class="skill-group">
+        <div class="skill-group reveal" style="--d:.2s">
           <h3>Workflow</h3>
           <ul><li>AI-assisted development</li><li>Debugging</li><li>Clear documentation</li></ul>
         </div>
       </div>
     </section>
 
-    <section id="projects" class="section">
+    <section id="projects" class="section reveal">
       <h2>Projects</h2>
       <div class="cards">
-        <article class="card">
+        <article class="card reveal" style="--d:0s">
           <div class="card-top">
             <h3>Personal portfolio</h3>
             <span class="tag tag-live">Live</span>
           </div>
           <p>A responsive, single-page portfolio built with semantic HTML and hand-written CSS.</p>
-          <p class="stack">HTML, CSS</p>
-          <a class="card-link" href="https://mahinurrahmansun.vercel.app/">Live site</a>
-          <a class="card-link" href="https://github.com/MahinurRahmanSun/my-portfolio">View on GitHub</a>
+          <p class="stack">HTML, CSS, JavaScript</p>
+          <div class="card-links">
+            <a class="card-link" href="https://mahinurrahmansun.vercel.app/">Live site</a>
+            <a class="card-link" href="https://github.com/MahinurRahmanSun/my-portfolio">View code</a>
+          </div>
         </article>
-        <article class="card">
-  <div class="card-top">
-    <h3>Task manager</h3>
-    <span class="tag tag-live">Live</span>
-  </div>
-  <p>A to-do app with add, complete, delete and filter actions. Tasks are saved in the browser.</p>
-  <p class="stack">HTML, CSS, JavaScript</p>
-  <div class="card-links">
-    <a class="card-link" href="https://sun-taskmanager.vercel.app">Live demo</a>
-    <a class="card-link" href="https://github.com/MahinurRahmanSun/task-manager">View code</a>
-  </div>
-</article>
+        <article class="card reveal" style="--d:.12s">
+          <div class="card-top">
+            <h3>Task manager</h3>
+            <span class="tag tag-live">Live</span>
+          </div>
+          <p>A to-do app with add, complete, delete and filter actions. Tasks are saved in the browser.</p>
+          <p class="stack">HTML, CSS, JavaScript</p>
+          <div class="card-links">
+            <a class="card-link" href="https://sun-taskmanager.vercel.app">Live demo</a>
+            <a class="card-link" href="https://github.com/MahinurRahmanSun/task-manager">View code</a>
+          </div>
+        </article>
+      </div>
     </section>
 
-    <section id="contact" class="section contact">
+    <section id="contact" class="section contact reveal">
       <h2>Contact</h2>
       <p>Have a question or want to work together? Send me an email and I'll get back to you.</p>
       <a class="btn btn-primary" href="mailto:md.mahinur.rahman.sun@gmail.com">md.mahinur.rahman.sun@gmail.com</a>
@@ -112,5 +117,6 @@
   <footer>
     <p>&copy; 2026 Md. Mahinur Rahman Sun</p>
   </footer>
+  <script src="script.js"></script>
 </body>
 </html>
