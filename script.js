@@ -1,141 +1,179 @@
+const root = document.documentElement;
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+document.querySelectorAll("[data-split]").forEach((line, lineIndex) => {
+  const text = line.textContent;
+  line.textContent = "";
+  Array.from(text).forEach((char, index) => {
+    const span = document.createElement("span");
+    span.className = "ch";
+    span.setAttribute("aria-hidden", "true");
+    span.style.setProperty("--i", index + lineIndex * 7);
+    span.textContent = char === " " ? "\u00a0" : char;
+    line.append(span);
+  });
+});
+
+function finishLoading() {
+  root.classList.add("loaded");
+}
+
+const counter = document.getElementById("count");
+if (reduceMotion) {
+  finishLoading();
+} else {
+  const startTime = performance.now();
+  const duration = 1200;
+  const tick = (now) => {
+    const progress = clamp((now - startTime) / duration, 0, 1);
+    counter.textContent = Math.round(progress * 100);
+    if (progress < 1) requestAnimationFrame(tick);
+    else setTimeout(finishLoading, 200);
+  };
+  requestAnimationFrame(tick);
+  setTimeout(finishLoading, 4000);
+}
+
+const themeButton = document.getElementById("theme");
+themeButton.addEventListener("click", () => {
+  const next = root.dataset.theme === "dark" ? "light" : "dark";
+  root.dataset.theme = next;
+  try {
+    localStorage.setItem("theme", next);
+  } catch (error) {
+    console.error("Could not save theme", error);
+  }
+});
+
 const menuToggle = document.querySelector(".menu-toggle");
 const siteNav = document.getElementById("site-nav");
-const navLinks = Array.from(document.querySelectorAll('#site-nav a[href^="#"]'));
-
+const navLinks = Array.from(siteNav.querySelectorAll("a"));
 function setMenu(open) {
   siteNav.classList.toggle("open", open);
   menuToggle.setAttribute("aria-expanded", String(open));
 }
-
 menuToggle.addEventListener("click", () => setMenu(!siteNav.classList.contains("open")));
 navLinks.forEach((link) => link.addEventListener("click", () => setMenu(false)));
 
-const revealObserver = new IntersectionObserver(
-  (entries, observer) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("visible");
-        observer.unobserve(entry.target);
-      }
-    });
-  },
-  { threshold: 0.12 }
-);
+const revealObserver = new IntersectionObserver((entries, observer) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("visible");
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
 document.querySelectorAll(".reveal").forEach((el) => revealObserver.observe(el));
 
-const sectionObserver = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      navLinks.forEach((link) => {
-        link.classList.toggle("active", link.getAttribute("href") === "#" + entry.target.id);
-      });
-    });
-  },
-  { rootMargin: "-40% 0px -55% 0px" }
-);
-navLinks
-  .map((link) => document.querySelector(link.getAttribute("href")))
-  .filter(Boolean)
-  .forEach((section) => sectionObserver.observe(section));
-
-const progress = document.getElementById("progress");
-function updateProgress() {
-  const max = document.documentElement.scrollHeight - window.innerHeight;
-  progress.style.transform = "scaleX(" + (max > 0 ? window.scrollY / max : 0) + ")";
-}
-window.addEventListener("scroll", updateProgress, { passive: true });
-updateProgress();
-
-const typed = document.getElementById("typed");
-const words = ["CSE student", "frontend developer", "builder who ships"];
-let wordIndex = 0;
-let charIndex = 0;
-let deleting = false;
-
-function type() {
-  const word = words[wordIndex];
-  charIndex += deleting ? -1 : 1;
-  typed.textContent = word.slice(0, charIndex);
-
-  let delay = deleting ? 45 : 85;
-  if (!deleting && charIndex === word.length) {
-    deleting = true;
-    delay = 1500;
-  } else if (deleting && charIndex === 0) {
-    deleting = false;
-    wordIndex = (wordIndex + 1) % words.length;
-    delay = 400;
-  }
-  setTimeout(type, delay);
-}
-
-if (reduceMotion) {
-  typed.textContent = words[0];
-} else {
-  type();
-
-}
-
-document.querySelectorAll(".card").forEach((card) => {
-  card.addEventListener("mousemove", (event) => {
-    const rect = card.getBoundingClientRect();
-    card.style.setProperty("--cx", event.clientX - rect.left + "px");
-    card.style.setProperty("--cy", event.clientY - rect.top + "px");
+const sectionObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
+    navLinks.forEach((link) => link.classList.toggle("active", link.getAttribute("href") === "#" + entry.target.id));
   });
+}, { rootMargin: "-40% 0px -55% 0px" });
+navLinks.map((link) => document.querySelector(link.getAttribute("href"))).filter(Boolean).forEach((section) => sectionObserver.observe(section));
+
+const statement = document.getElementById("statement");
+const words = statement.textContent.trim().split(/\s+/);
+statement.textContent = "";
+const wordEls = words.map((word) => {
+  const span = document.createElement("span");
+  span.className = "w";
+  span.textContent = word;
+  statement.append(span, " ");
+  return span;
 });
 
-document.querySelectorAll(".skill-group li").forEach((li, index) => li.style.setProperty("--i", index % 4));
+const progress = document.getElementById("progress");
+function onScroll() {
+  const max = root.scrollHeight - window.innerHeight;
+  progress.style.transform = "scaleX(" + (max > 0 ? window.scrollY / max : 0) + ")";
+  const start = window.innerHeight * 0.88;
+  const end = window.innerHeight * 0.4;
+  wordEls.forEach((el) => {
+    const top = el.getBoundingClientRect().top;
+    const amount = clamp((start - top) / (start - end), 0, 1);
+    el.style.opacity = 0.18 + amount * 0.82;
+  });
+}
+let scrollTicking = false;
+window.addEventListener("scroll", () => {
+  if (scrollTicking) return;
+  scrollTicking = true;
+  requestAnimationFrame(() => {
+    onScroll();
+    scrollTicking = false;
+  });
+}, { passive: true });
+window.addEventListener("resize", onScroll);
+onScroll();
 
-const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+const timeEl = document.getElementById("time");
+const formatter = new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Dhaka", hour: "2-digit", minute: "2-digit", hour12: false });
+function updateTime() {
+  timeEl.textContent = formatter.format(new Date());
+}
+updateTime();
+setInterval(updateTime, 15000);
+
+const toast = document.getElementById("toast");
+document.getElementById("copy").addEventListener("click", async (event) => {
+  const email = event.currentTarget.dataset.email;
+  try {
+    await navigator.clipboard.writeText(email);
+    toast.textContent = "Email copied";
+  } catch (error) {
+    toast.textContent = email;
+  }
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 2200);
+});
 
 if (finePointer && !reduceMotion) {
-  const spotlight = document.getElementById("spotlight");
-  const orbs = document.querySelector(".orbs");
-  let targetX = window.innerWidth / 2;
-  let targetY = window.innerHeight / 3;
-  let x = targetX;
-  let y = targetY;
+  root.classList.add("cursor-on");
+  const dot = document.getElementById("cursor");
+  const ring = document.getElementById("ring");
+  const preview = document.getElementById("preview");
+  const previewTitle = document.getElementById("preview-title");
+  let mouseX = -100, mouseY = -100, ringX = -100, ringY = -100, previewX = -100, previewY = -100;
 
   window.addEventListener("mousemove", (event) => {
-    targetX = event.clientX;
-    targetY = event.clientY;
-    spotlight.classList.add("on");
+    mouseX = event.clientX;
+    mouseY = event.clientY;
+    dot.style.transform = "translate3d(" + mouseX + "px," + mouseY + "px,0)";
   }, { passive: true });
 
-  document.addEventListener("mouseleave", () => spotlight.classList.remove("on"));
+  (function animate() {
+    ringX += (mouseX - ringX) * 0.18;
+    ringY += (mouseY - ringY) * 0.18;
+    previewX += (mouseX - previewX) * 0.12;
+    previewY += (mouseY - previewY) * 0.12;
+    ring.style.transform = "translate3d(" + ringX + "px," + ringY + "px,0)";
+    preview.style.transform = "translate3d(" + previewX + "px," + previewY + "px,0)";
+    requestAnimationFrame(animate);
+  })();
 
-  function follow() {
-    x += (targetX - x) * 0.12;
-    y += (targetY - y) * 0.12;
-    spotlight.style.transform = "translate3d(" + x + "px," + y + "px,0)";
-    const px = (x / window.innerWidth - 0.5) * -30;
-    const py = (y / window.innerHeight - 0.5) * -30;
-    orbs.style.transform = "translate3d(" + px + "px," + py + "px,0)";
-    requestAnimationFrame(follow);
-  }
-  follow();
+  document.querySelectorAll("a, button, .row").forEach((el) => {
+    el.addEventListener("mouseenter", () => ring.classList.add("grow"));
+    el.addEventListener("mouseleave", () => ring.classList.remove("grow"));
+  });
 
-  document.querySelectorAll(".card, .code-window").forEach((el) => {
-    el.classList.add("tilt");
-    el.addEventListener("mousemove", (event) => {
-      const rect = el.getBoundingClientRect();
-      const px = (event.clientX - rect.left) / rect.width - 0.5;
-      const py = (event.clientY - rect.top) / rect.height - 0.5;
-      el.style.setProperty("--ry", px * 8 + "deg");
-      el.style.setProperty("--rx", py * -8 + "deg");
+  document.querySelectorAll(".row").forEach((row) => {
+    row.addEventListener("mouseenter", () => {
+      preview.style.setProperty("--c1", row.dataset.c1);
+      preview.style.setProperty("--c2", row.dataset.c2);
+      previewTitle.textContent = row.dataset.title;
+      preview.classList.add("on");
     });
-    el.addEventListener("mouseleave", () => {
-      el.style.setProperty("--rx", "0deg");
-      el.style.setProperty("--ry", "0deg");
-    });
+    row.addEventListener("mouseleave", () => preview.classList.remove("on"));
   });
 
   document.querySelectorAll(".btn").forEach((btn) => {
     btn.addEventListener("mousemove", (event) => {
       const rect = btn.getBoundingClientRect();
-      btn.style.setProperty("--bx", (event.clientX - rect.left - rect.width / 2) * 0.2 + "px");
+      btn.style.setProperty("--bx", (event.clientX - rect.left - rect.width / 2) * 0.22 + "px");
       btn.style.setProperty("--by", (event.clientY - rect.top - rect.height / 2) * 0.3 + "px");
     });
     btn.addEventListener("mouseleave", () => {

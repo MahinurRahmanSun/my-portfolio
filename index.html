@@ -4,126 +4,108 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Md. Mahinur Rahman Sun | CSE Student</title>
-  <meta name="description" content="Portfolio of Md. Mahinur Rahman Sun, BSc in CSE student at Southeast University.">
-  <meta name="theme-color" content="#0a0d14">
+  <meta name="description" content="Portfolio of Md. Mahinur Rahman Sun, BSc in CSE student at Southeast University, Dhaka.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script>document.documentElement.classList.add("js");</script>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <script>try{var t=localStorage.getItem("theme");if(!t){t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}document.documentElement.classList.add("js")</script>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="loader" aria-hidden="true"><span>Mahinur Rahman Sun</span><b id="count">0</b></div>
   <div class="progress" id="progress"></div>
-  <div class="orbs" aria-hidden="true"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
-  <div class="spotlight" id="spotlight" aria-hidden="true"></div>
+  <div class="cursor" id="cursor"></div><div class="cursor-ring" id="ring"></div>
+  <div class="preview" id="preview" aria-hidden="true"><div class="preview-art"><span id="preview-title"></span></div></div>
 
   <header class="nav">
-    <div class="nav-inner">
-      <a class="brand" href="#top"><span class="brand-mark">S</span>Mahinur Rahman Sun</a>
+    <a class="brand" href="#top">Mahinur Rahman Sun</a>
+    <nav id="site-nav" aria-label="Main">
+      <a href="#about">About</a>
+      <a href="#stack">Stack</a>
+      <a href="#work">Work</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="nav-tools">
+      <button class="theme-toggle" id="theme" aria-label="Switch theme"><i></i></button>
       <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
-      <nav id="site-nav" aria-label="Main">
-        <a href="#about">About</a>
-        <a href="#skills">Skills</a>
-        <a href="#projects">Projects</a>
-        <a class="nav-cta" href="#contact">Contact</a>
-      </nav>
     </div>
   </header>
 
   <main id="top">
-    <section class="hero" id="hero">
-      <div class="hero-text">
-        <p class="status"><span class="dot"></span>BSc in CSE, Southeast University</p>
-        <h1>I turn ideas into <span class="hl">clean, fast</span> websites.</h1>
-        <p class="role">Md. Mahinur Rahman Sun, <span id="typed" aria-live="off"></span><span class="caret"></span></p>
-        <p class="lead">I build responsive frontends and use AI tools to move faster, while making sure I understand every line I ship.</p>
+    <section class="hero">
+      <p class="eyebrow">Frontend developer in the making</p>
+      <h1 aria-label="Mahinur Rahman Sun"><span class="line" data-split>Mahinur</span><span class="line accent" data-split>Rahman Sun</span></h1>
+      <div class="hero-row">
+        <p class="lead">I'm a CSE student in Dhaka who builds clean, responsive websites. I use AI tools to move faster, and I make sure I understand every line I ship.</p>
         <div class="actions">
-          <a class="btn btn-primary" href="#projects">View projects</a>
-          <a class="btn btn-ghost" href="#contact">Get in touch</a>
+          <a class="btn btn-solid" href="#work">See my work</a>
+          <a class="btn btn-line" href="#contact">Get in touch</a>
         </div>
       </div>
-
-      <div class="code-window" aria-label="About me as code">
-        <div class="code-bar"><i></i><i></i><i></i><span>developer.js</span></div>
-<pre><code><span class="k">const</span> <span class="v">developer</span> = {
-  <span class="p">name</span>: <span class="s">"Md. Mahinur Rahman Sun"</span>,
-  <span class="p">degree</span>: <span class="s">"BSc in CSE"</span>,
-  <span class="p">university</span>: <span class="s">"Southeast University"</span>,
-  <span class="p">location</span>: <span class="s">"Dhaka, Bangladesh"</span>,
-  <span class="p">focus</span>: [<span class="s">"HTML"</span>, <span class="s">"CSS"</span>, <span class="s">"JavaScript"</span>],
-  <span class="p">learns</span>: <span class="s">"by building"</span>,
-  <span class="p">usesAI</span>: <span class="b">true</span>
-};</code></pre>
-      </div>
+      <dl class="facts">
+        <div><dt>Education</dt><dd>BSc in CSE</dd></div>
+        <div><dt>University</dt><dd>Southeast University</dd></div>
+        <div><dt>Based in</dt><dd>Dhaka, <span id="time">--:--</span></dd></div>
+        <div><dt>Focus</dt><dd>Frontend web</dd></div>
+      </dl>
     </section>
 
-    <div class="marquee" aria-hidden="true">
-      <div class="marquee-track">
-        <span>HTML</span><span>CSS</span><span>JavaScript</span><span>Git</span><span>GitHub</span><span>Vercel</span><span>Responsive design</span><span>VS Code</span>
-        <span>HTML</span><span>CSS</span><span>JavaScript</span><span>Git</span><span>GitHub</span><span>Vercel</span><span>Responsive design</span><span>VS Code</span>
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track">
+        <span>HTML</span><span>CSS</span><span>JavaScript</span><span>Git</span><span>GitHub</span><span>Vercel</span><span>Responsive design</span>
+        <span>HTML</span><span>CSS</span><span>JavaScript</span><span>Git</span><span>GitHub</span><span>Vercel</span><span>Responsive design</span>
       </div>
     </div>
 
-    <section id="about" class="section reveal">
-      <p class="eyebrow">01 / About</p>
-      <h2>Learning by building, one project at a time.</h2>
-      <div class="about-body">
-        <p>I'm a BSc in CSE student at Southeast University in Dhaka, focused on frontend web development.</p>
-        <p>Every concept I study becomes a small project on GitHub. I use AI tools as a fast assistant, and I review and understand each line before it goes into my work.</p>
-      </div>
+    <section id="about" class="section">
+      <p class="label">01 About</p>
+      <p class="statement" id="statement">I learn by building. Every concept I study becomes a small project on GitHub, shipped live and open for anyone to read. I'm a BSc in CSE student at Southeast University, and I'm growing into frontend development one real project at a time.</p>
     </section>
 
-    <section id="skills" class="section reveal">
-      <p class="eyebrow">02 / Skills</p>
-      <h2>What I work with.</h2>
-      <div class="skill-grid">
-        <div class="skill-group reveal" style="--d:0s">
+    <section id="stack" class="section">
+      <p class="label">02 Stack and roadmap</p>
+      <ul class="legend"><li><i class="s-using"></i>Using</li><li><i class="s-learning"></i>Learning</li><li><i class="s-next"></i>Up next</li></ul>
+      <div class="stack-grid">
+        <div class="stack-col reveal" style="--d:0s">
           <h3>Frontend</h3>
-          <ul><li>HTML</li><li>CSS</li><li>Responsive design</li><li>JavaScript (learning)</li></ul>
+          <ul><li><i class="s-using"></i>HTML</li><li><i class="s-using"></i>CSS</li><li><i class="s-using"></i>Responsive design</li><li><i class="s-learning"></i>JavaScript</li><li><i class="s-next"></i>React</li></ul>
         </div>
-        <div class="skill-group reveal" style="--d:.1s">
+        <div class="stack-col reveal" style="--d:.1s">
           <h3>Tools</h3>
-          <ul><li>Git</li><li>GitHub</li><li>VS Code</li><li>Vercel</li></ul>
+          <ul><li><i class="s-using"></i>Git and GitHub</li><li><i class="s-using"></i>VS Code</li><li><i class="s-using"></i>Vercel</li><li><i class="s-next"></i>Figma</li></ul>
         </div>
-        <div class="skill-group reveal" style="--d:.2s">
+        <div class="stack-col reveal" style="--d:.2s">
           <h3>Workflow</h3>
-          <ul><li>AI-assisted development</li><li>Debugging</li><li>Clear documentation</li></ul>
+          <ul><li><i class="s-using"></i>AI-assisted development</li><li><i class="s-using"></i>Debugging</li><li><i class="s-next"></i>API integration</li><li><i class="s-next"></i>AI-powered apps</li></ul>
         </div>
       </div>
     </section>
 
-    <section id="projects" class="section reveal">
-      <p class="eyebrow">03 / Projects</p>
-      <h2>Things I've built.</h2>
-      <div class="cards">
-        <article class="card reveal" style="--d:0s">
-          <div class="card-top"><span class="num">01</span><span class="tag">Live</span></div>
-          <h3>Personal portfolio</h3>
-          <p>A responsive, single-page portfolio built with semantic HTML, hand-written CSS and a little JavaScript.</p>
-          <p class="stack">HTML · CSS · JavaScript</p>
-          <div class="card-links">
-            <a class="card-link" href="https://mahinurrahmansun.vercel.app/">Live site</a>
-            <a class="card-link" href="https://github.com/MahinurRahmanSun/my-portfolio">View code</a>
-          </div>
-        </article>
-        <article class="card reveal" style="--d:.12s">
-          <div class="card-top"><span class="num">02</span><span class="tag">Live</span></div>
-          <h3>Task manager</h3>
-          <p>A to-do app with add, complete, delete and filter actions. Tasks are saved in the browser.</p>
-          <p class="stack">HTML · CSS · JavaScript</p>
-          <div class="card-links">
-            <a class="card-link" href="https://sun-taskmanager.vercel.app">Live demo</a>
-            <a class="card-link" href="https://github.com/MahinurRahmanSun/task-manager">View code</a>
-          </div>
-        </article>
-      </div>
+    <section id="work" class="section">
+      <p class="label">03 Selected work</p>
+      <ul class="rows">
+        <li class="row reveal" data-title="Portfolio" data-c1="#ff4b1f" data-c2="#ffb89e">
+          <span class="row-num">01</span>
+          <div class="row-main"><h3>Personal portfolio</h3><p>A responsive single-page site with hand-written CSS and JavaScript animation.</p></div>
+          <span class="row-stack">HTML, CSS, JavaScript</span>
+          <div class="row-links"><a href="https://mahinurrahmansun.vercel.app/">Live</a><a href="https://github.com/MahinurRahmanSun/my-portfolio">Code</a></div>
+        </li>
+        <li class="row reveal" data-title="Tasks" data-c1="#1f3bff" data-c2="#a9b6ff" style="--d:.1s">
+          <span class="row-num">02</span>
+          <div class="row-main"><h3>Task manager</h3><p>Add, complete, delete and filter tasks. Everything is saved in the browser.</p></div>
+          <span class="row-stack">HTML, CSS, JavaScript</span>
+          <div class="row-links"><a href="https://sun-taskmanager.vercel.app">Live</a><a href="https://github.com/MahinurRahmanSun/task-manager">Code</a></div>
+        </li>
+      </ul>
     </section>
 
-    <section id="contact" class="section contact reveal">
-      <p class="eyebrow">04 / Contact</p>
-      <h2>Let's build something together.</h2>
-      <p>Have a question or an idea? Send me an email and I'll get back to you.</p>
-      <a class="btn btn-primary" href="mailto:md.mahinur.rahman.sun@gmail.com">md.mahinur.rahman.sun@gmail.com</a>
+    <section id="contact" class="section contact">
+      <p class="label">04 Contact</p>
+      <h2 class="big">Let's build<br>something <em>together.</em></h2>
+      <div class="mail">
+        <a class="mail-link" href="mailto:md.mahinur.rahman.sun@gmail.com">md.mahinur.rahman.sun@gmail.com</a>
+        <button class="btn btn-line" id="copy" data-email="md.mahinur.rahman.sun@gmail.com">Copy email</button>
+      </div>
       <ul class="social">
         <li><a href="https://github.com/MahinurRahmanSun">GitHub</a></li>
         <li><a href="https://www.linkedin.com/in/mahinurrahmansun">LinkedIn</a></li>
@@ -133,7 +115,9 @@
 
   <footer>
     <p>&copy; 2026 Md. Mahinur Rahman Sun</p>
+    <a href="#top">Back to top</a>
   </footer>
+  <div class="toast" id="toast" role="status">Email copied</div>
   <script src="script.js"></script>
 </body>
 </html>
