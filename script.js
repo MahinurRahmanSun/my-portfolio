@@ -254,37 +254,3 @@ document.querySelectorAll(".quick button").forEach((button) => {
 });
 
 line("Welcome! This is an interactive terminal. Type 'help' to begin.", "ok");
-
-if (finePointer && !reduceMotion) {
-  const spotlight = document.getElementById("spotlight");
-  let targetX = window.innerWidth / 2;
-  let targetY = window.innerHeight / 3;
-  let x = targetX;
-  let y = targetY;
-
-  window.addEventListener("mousemove", (event) => {
-    targetX = event.clientX;
-    targetY = event.clientY;
-    root.style.setProperty("--mx", targetX + "px");
-    root.style.setProperty("--my", targetY + "px");
-    spotlight.classList.add("on");
-  }, { passive: true });
-
-  document.addEventListener("mouseleave", () => spotlight.classList.remove("on"));
-  document.addEventListener("mouseenter", () => spotlight.classList.add("on"));
-
-  (function follow() {
-    x += (targetX - x) * 0.16;
-    y += (targetY - y) * 0.16;
-    spotlight.style.transform = "translate3d(" + x + "px," + y + "px,0)";
-    requestAnimationFrame(follow);
-  })();
-
-  document.querySelectorAll(".win").forEach((win) => {
-    win.addEventListener("mousemove", (event) => {
-      const rect = win.getBoundingClientRect();
-      win.style.setProperty("--cx", event.clientX - rect.left + "px");
-      win.style.setProperty("--cy", event.clientY - rect.top + "px");
-    });
-  });
-}

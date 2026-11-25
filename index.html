@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-accent="teal">
+<html lang="en" data-accent="blue">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-  <script>try{var a=localStorage.getItem("accent");if(a)document.documentElement.dataset.accent=a}catch(e){}document.documentElement.classList.add("js")</script>
+  <script>try{var a=localStorage.getItem("accent");if(a==="red"||a==="green"||a==="blue")document.documentElement.dataset.accent=a}catch(e){}document.documentElement.classList.add("js")</script>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -28,9 +28,9 @@
     </nav>
     <div class="nav-tools">
       <div class="swatches" role="group" aria-label="Accent color">
-        <button data-accent="teal" aria-label="Teal accent"></button>
-        <button data-accent="amber" aria-label="Amber accent"></button>
-        <button data-accent="violet" aria-label="Violet accent"></button>
+        <button data-accent="blue" aria-label="Blue accent"></button>
+        <button data-accent="red" aria-label="Red accent"></button>
+        <button data-accent="green" aria-label="Green accent"></button>
       </div>
       <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
     </div>
