@@ -104,10 +104,36 @@ document.getElementById("copy").addEventListener("click", async () => {
 });
 
 if (finePointer && !reduceMotion) {
+  const spotlight = document.getElementById("spotlight");
+  let targetX = window.innerWidth * 0.7;
+  let targetY = window.innerHeight * 0.25;
+  let x = targetX;
+  let y = targetY;
+
   window.addEventListener("mousemove", (event) => {
-    root.style.setProperty("--mx", event.clientX + "px");
-    root.style.setProperty("--my", event.clientY + "px");
+    targetX = event.clientX;
+    targetY = event.clientY;
+    spotlight.classList.add("on");
   }, { passive: true });
+
+  document.addEventListener("mouseleave", () => spotlight.classList.remove("on"));
+
+  (function follow() {
+    x += (targetX - x) * 0.14;
+    y += (targetY - y) * 0.14;
+    spotlight.style.transform = "translate3d(" + x + "px," + y + "px,0)";
+    root.style.setProperty("--mx", x + "px");
+    root.style.setProperty("--my", y + "px");
+    requestAnimationFrame(follow);
+  })();
+
+  document.querySelectorAll(".win").forEach((win) => {
+    win.addEventListener("mousemove", (event) => {
+      const rect = win.getBoundingClientRect();
+      win.style.setProperty("--cx", event.clientX - rect.left + "px");
+      win.style.setProperty("--cy", event.clientY - rect.top + "px");
+    });
+  });
 }
 
 const out = document.getElementById("term-out");
